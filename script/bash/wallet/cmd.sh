@@ -8,8 +8,8 @@
 # ・$2: 実行するコマンド
 # ・$3以降: コマンドに渡す引数
 # [Example]
-# ・停止: ./cmd.sh /home/wallet/xxcoin/env.sh stop
-# ・ヘルプ: ./cmd.sh /home/wallet/xxcoin/env.sh help getinfo
+# ・停止: ./cmd.sh /home/wallet/xxcoin/env_wallet.sh stop
+# ・ヘルプ: ./cmd.sh /home/wallet/xxcoin/env_wallet.sh help getinfo
 ##################################################################
 
 source ${1}
