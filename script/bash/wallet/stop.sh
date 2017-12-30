@@ -4,9 +4,9 @@
 # stop.sh: Walletデーモンを停止する
 # [引数]
 # ・$1: 設定ファイルパス
-#       設定ファイルはenv_wallet.sh.sampleを参照
+#       設定ファイルはwallet.settings.sampleを参照
 # [Example]
-# ・停止: ./stop.sh /home/wallet/xxcoin/env_wallet.sh
+# ・停止: ./stop.sh /home/wallet/xxcoin/wallet.settings
 ##################################################################
 
 if [ -z "${1}" -o ! -f "${1}" ]; then

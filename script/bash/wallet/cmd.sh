@@ -4,13 +4,18 @@
 # cmd.sh: ウォレットコマンド(client API)を実行する
 # [引数]
 # ・$1: 設定ファイルパス
-#       設定ファイルはenv.sh.sampleを参照
+#       設定ファイルはwallet.settings.sampleを参照
 # ・$2: 実行するコマンド
 # ・$3以降: コマンドに渡す引数
 # [Example]
-# ・停止: ./cmd.sh /home/wallet/xxcoin/env_wallet.sh stop
-# ・ヘルプ: ./cmd.sh /home/wallet/xxcoin/env_wallet.sh help getinfo
+# ・停止: ./cmd.sh /home/wallet/xxcoin/wallet.settings stop
+# ・ヘルプ: ./cmd.sh /home/wallet/xxcoin/wallet.settings help getinfo
 ##################################################################
+
+if [ -z "${1}" -o ! -f "${1}" ]; then
+    echo "Settings is invalid."
+    exit 1
+fi
 
 source ${1}
 
