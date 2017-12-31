@@ -1,0 +1,51 @@
+#!/bin/bash
+
+######################################################################
+# zaif.setting.sample
+#
+# [Description]
+#  ZAIF用bashの環境設定ファイル。
+#
+#  APIからデータ取得関連
+#  * ENV_ZAIF_API_xxx_FLG: 値が空以外はデータを取得する、空はデータを取得しない
+#  * ENV_ZAIF_API_xxx_DIR: APIから取得したデータの出力先ディレクトリ
+#  * ENV_ZAIF_API_xxx_FILE: APIから取得したデータの出力ファイル名
+#
+######################################################################
+
+# Zaif用Configファイルパス
+ENV_ZAIF_CONFIG=./zaif.config
+
+# 取得したデータの出力先
+ENV_ZAIF_API_OUTPUT_PATH=/data/zaif
+
+# currencies 通貨情報 /currencies/{currency}
+ENV_ZAIF_API_CURRENCIES_FLG=
+ENV_ZAIF_API_CURRENCIES_DIR=${ENV_ZAIF_API_OUTPUT_PATH}/currencies
+ENV_ZAIF_API_CURRENCIES_FILE=zaif-currencies.json
+
+# currency_pairs 通貨ペア情報 /currency_pairs/{currency_pair}
+ENV_ZAIF_API_CURRENCYPAIRS_FLG=
+ENV_ZAIF_API_CURRENCYPAIRS_DIR=${ENV_ZAIF_API_OUTPUT_PATH}/currencypairs
+ENV_ZAIF_API_CURRENCYPAIRS_FILE=zaif-currencypairs.json
+
+# last_price 現在の終値 /last_price/{currency_pair}
+ENV_ZAIF_API_LASTPRICE_FLG=on
+ENV_ZAIF_API_LASTPRICE_DIR=${ENV_ZAIF_API_OUTPUT_PATH}/lastprice
+ENV_ZAIF_API_LASTPRICE_FILE=zaif-lastprice.json
+
+# ticker ティッカー /ticker/{currency_pair}
+ENV_ZAIF_API_TICKER_FLG=on
+ENV_ZAIF_API_TICKER_DIR=${ENV_ZAIF_API_OUTPUT_PATH}/ticker
+ENV_ZAIF_API_TICKER_FILE=zaif-ticker.json
+
+# trades 全ての取引履歴 /trades/{currency_pair}
+ENV_ZAIF_API_TRADES_FLG=
+ENV_ZAIF_API_TRADES_DIR=${ENV_ZAIF_API_OUTPUT_PATH}/trades
+ENV_ZAIF_API_TRADES_FILE=zaif-trades.json
+
+# depth 板情報 /depth/{currency_pair}
+ENV_ZAIF_API_DEPTH_FLG=
+ENV_ZAIF_API_DEPTH_DIR=${ENV_ZAIF_API_OUTPUT_PATH}/depth
+ENV_ZAIF_API_DEPTH_FILE=zaif-depth.json
+

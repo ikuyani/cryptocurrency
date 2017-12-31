@@ -1,0 +1,46 @@
+#!/bin/bash
+
+######################################################################
+# coincheck.setting.sample
+#
+# [Description]
+#  Coincheck用bashの環境設定ファイル。
+#
+#  APIからデータ取得関連
+#  * ENV_COINCHECK_API_xxx_FLG: 値が空以外はデータを取得する、空はデータを取得しない
+#  * ENV_COINCHECK_API_xxx_DIR: APIから取得したデータの出力先ディレクトリ
+#  * ENV_COINCHECK_API_xxx_FILE: APIから取得したデータの出力ファイル名
+#
+######################################################################
+
+# Coincheck用Configファイルパス
+ENV_COINCHECK_CONFIG=./coincheck.config
+
+# 取得したデータの出力先
+ENV_COINCHECK_API_OUTPUT_PATH=/data/coincheck
+
+# Ticker ティッカー /api/ticker
+ENV_COINCHECK_API_TICKER_FLG=on
+ENV_COINCHECK_API_TICKER_DIR=${ENV_COINCHECK_API_OUTPUT_PATH}/ticker
+ENV_COINCHECK_API_TICKER_FILE=coincheck-ticker.json
+
+# Public trades 全取引履歴 /api/trades
+ENV_COINCHECK_API_TRADES_FLG=
+ENV_COINCHECK_API_TRADES_DIR=${ENV_COINCHECK_API_OUTPUT_PATH}/trades
+ENV_COINCHECK_API_TRADES_FILE=coincheck-trades.json
+
+# Order Book 板情報 /api/order_books
+ENV_COINCHECK_API_ORDERBOOKS_FLG=
+ENV_COINCHECK_API_ORDERBOOKS_DIR=${ENV_COINCHECK_API_OUTPUT_PATH}/orderbooks
+ENV_COINCHECK_API_ORDERBOOKS_FILE=coincheck-orderbooks.json
+
+# Calc Rate レート取得 /api/exchange/orders/rate
+ENV_COINCHECK_API_ORDERSRATE_FLG=on
+ENV_COINCHECK_API_ORDERSRATE_DIR=${ENV_COINCHECK_API_OUTPUT_PATH}/ordersrate
+ENV_COINCHECK_API_ORDERSRATE_FILE=coincheck-ordersrate.json
+
+# Buy Rate 販売レート取得 /api/rate/[pair]
+ENV_COINCHECK_API_RATE_FLG=on
+ENV_COINCHECK_API_RATE_DIR=${ENV_COINCHECK_API_OUTPUT_PATH}/rate
+ENV_COINCHECK_API_RATE_FILE=coincheck-rate.json
+
