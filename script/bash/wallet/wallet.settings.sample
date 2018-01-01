@@ -19,6 +19,7 @@ ENV_CMD_SH=${ENV_BATCH_DIR}/cmd.sh
 # commad
 ENV_CMD_START=${ENV_BATCH_DIR}/start.sh
 ENV_CMD_STOP=${ENV_BATCH_DIR}/stop.sh
+ENV_CMD_GETBLOCKCOUNT=${ENV_BATCH_DIR}/getblockcount.sh
 
 # wallet data home
 ENV_WALLETDATA_HOME=/home/user/.xxcoin
