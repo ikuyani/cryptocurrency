@@ -21,7 +21,7 @@ if [ -z "${1}" -o ! -f "${1}" ]; then
 fi
 
 source "${1}"
+source "${ENV_CONFIG}"
 
-eval "${ENV_CMD_SH} ${1} stop"
-
+eval "${ENV_CMD_DIR}/${CF_CMD} ${1} stop"
 

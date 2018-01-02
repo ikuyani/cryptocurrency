@@ -1,5 +1,13 @@
 #!/bin/bash
 
+######################################################################
+# wallet.setting.sample
+#
+# [Description]
+#  wallet用bashの環境設定ファイル。
+#
+######################################################################
+
 # wallet application home
 ENV_WALLETAPP_HOME=/wallet/xxcoin
 # daemon file
@@ -7,20 +15,16 @@ ENV_DAEMON=${ENV_WALLETAPP_HOME}/bin/xxcoind
 # client file
 ENV_CLIENT=${ENV_WALLETAPP_HOME}/bin/xxcoin-cli
 
-# LD_LIBRARY_PATH(BerkeleyDB.4.8, OpenSSL, Boost ...)
-ENV_LIB=
-#ENV_LIB=/wallet/common/lib
-
-# batch-file's directory
-ENV_BATCH_DIR=/wallet/cryptocurrency/script/bash/wallet
-# cmd file
-ENV_CMD_SH=${ENV_BATCH_DIR}/cmd.sh
-
-# commad
-ENV_CMD_START=${ENV_BATCH_DIR}/start.sh
-ENV_CMD_STOP=${ENV_BATCH_DIR}/stop.sh
-ENV_CMD_GETBLOCKCOUNT=${ENV_BATCH_DIR}/getblockcount.sh
-
 # wallet data home
 ENV_WALLETDATA_HOME=/home/user/.xxcoin
 
+# LD_LIBRARY_PATH(BerkeleyDB.4.8, OpenSSL, Boost ...)
+ENV_LIB=
+#ENV_LIB=/wallet/common/lib
+#ENV_LIB=/wallet/xxcoin/lib
+
+# command-file's directory
+ENV_CMD_DIR=/wallet/cryptocurrency/script/bash/wallet
+
+# config-file
+ENV_CONFIG=/wallet/cryptocurrency/script/bash/wallet/wallet.config
