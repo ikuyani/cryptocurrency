@@ -24,9 +24,9 @@ ENV_LIB=
 #ENV_LIB=/wallet/xxcoin/lib
 
 # command-file's directory
-ENV_CMD_DIR=/wallet/cryptocurrency/script/bash/wallet
+ENV_CMD_DIR=/wallet/cryptocurrency-script/main/bash/wallet
 
 # config-file
-ENV_CONFIG=/wallet/cryptocurrency/script/bash/wallet/wallet.config
+ENV_CONFIG=${ENV_CMD_DIR}/wallet.config
 
 
