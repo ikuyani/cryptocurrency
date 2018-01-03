@@ -1,17 +1,17 @@
 #!/bin/bash
 
 ######################################################################
-# stop.sh
+# getblockcount.sh
 # 
 # [Description]
-#  ウォレットを停止する。
+#  ブロックチェーンのブロック数を取得する。
 # 
 # [Arguments]
 #  * $1: 設定ファイルパス
 #        設定ファイルはwallet.settings.sampleを参照
 # 
 # [Example]
-#  * 停止: ./stop.sh /wallet/xxcoin/wallet.settings
+#  * ./getblockcount.sh /wallet/xxcoin/wallet.settings
 # 
 ######################################################################
 
@@ -23,6 +23,6 @@ fi
 source "${1}"
 source "${ENV_CONFIG}"
 
-eval '"${ENV_CMD_DIR}/${CF_CMD}" "${1}" stop'
+eval '"${ENV_CMD_DIR}/${CF_CMD}" "${1}" getblockcount'
 exit $?
 

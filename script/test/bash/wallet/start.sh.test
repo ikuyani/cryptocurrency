@@ -1,0 +1,127 @@
+#!/bin/bash
+
+v_log="${1}"
+if [ -z "${v_log}" -o ! -f "${v_log}" ]; then
+    v_log="start.sh.test.log"
+    echo > "${v_log}"
+fi
+
+echo "start.sh.test: ********** START TEST *******************************" 2>&1 | tee -a "${v_log}"
+source ./test.settings
+
+# 1-1 引数チェック 
+echo "start.sh.test: start 1-1" >> "${v_log}" 2>&1
+eval "${TEST_CMD_DIR}/start.sh" >> "${v_log}" 2>&1
+v_err=$?
+if [ ${v_err} -eq 100 ]; then
+    echo "start.sh.test: Successful 1-1 " 2>&1 | tee -a "${v_log}"
+else
+    echo "start.sh.test: Failed 1-1 ${v_err}" 2>&1 | tee -a "${v_log}"
+fi
+
+# 1-2 引数チェック
+echo "start.sh.test: start 1-2" >> "${v_log}" 2>&1
+eval '"${TEST_CMD_DIR}/start.sh" /home' >> "${v_log}" 2>&1
+v_err=$?
+if [ ${v_err} -eq 100 ]; then
+    echo "start.sh.test: Successful 1-2 " 2>&1 | tee -a "${v_log}"
+else
+    echo "start.sh.test: Failed 1-2 ${v_err}" 2>&1 | tee -a "${v_log}"
+fi
+
+# 2-1 正常 LIB指定あり
+echo "start.sh.test: start 2-1" >> "${v_log}" 2>&1
+v_check=`ps aux | grep ${TEST_WALLET_PROCESS} | grep -v grep | wc -l`
+if [ ${v_check} -gt 0 ]; then
+    eval 'LD_LIBRARY_PATH="${TEST_LIB}" "${TEST_CLIENT}" stop' > /dev/null 2>&1
+fi
+v_err=1
+for ((i=0; i < ${TEST_STOP_RETRY_MAX}; i++)); do
+    sleep ${TEST_STOP_WAIT_SECOND}s
+    v_check=`ps aux | grep ${TEST_WALLET_PROCESS} | grep -v grep | wc -l`
+    if [ ${v_check} -eq 0 ]; then
+        v_err=0
+        break
+    fi
+    echo "stop retry ${i}" >> "${v_log}" 2>&1
+done
+if [ ${v_err} -eq 1 ]; then
+    echo "start.sh.test: Error, wallet process stop failed." 2>&1 | tee -a "${v_log}"
+    exit 1
+fi
+
+eval '"${TEST_CMD_DIR}/start.sh" "${TEST_SETTINGS}"' >> "${v_log}" 2>&1
+v_err=$?
+
+if [ ${v_err} -eq 0 ]; then
+    v_err=1
+    for ((i=0; i < ${TEST_START_RETRY_MAX}; i++)); do
+        sleep ${TEST_START_WAIT_SECOND}s
+        eval 'LD_LIBRARY_PATH="${TEST_LIB}" "${TEST_CLIENT}" help' > /dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            v_err=0
+            break
+        fi
+        echo "start retry ${i}" >> "${v_log}" 2>&1
+    done
+    if [ ${v_err} -eq 1 ]; then
+        echo "start.sh.test: Failed 2-1(2) " 2>&1 | tee -a "${v_log}"
+    else
+        echo "start.sh.test: Successful 2-1 " 2>&1 | tee -a "${v_log}"
+    fi
+
+else
+    echo "start.sh.test: Failed 2-1(1) ${v_err}" 2>&1 | tee -a "${v_log}"
+fi
+
+# 2-2 正常 LIB指定なし
+echo "start.sh.test: start 2-2" >> "${v_log}" 2>&1
+v_check=`ps aux | grep ${TEST_WALLET_PROCESS} | grep -v grep | wc -l`
+if [ ${v_check} -gt 0 ]; then
+    eval 'LD_LIBRARY_PATH="${TEST_LIB}" "${TEST_CLIENT}" stop' > /dev/null 2>&1
+fi
+v_err=1
+for ((i=0; i < ${TEST_STOP_RETRY_MAX}; i++)); do
+    sleep ${TEST_STOP_WAIT_SECOND}s
+    v_check=`ps aux | grep ${TEST_WALLET_PROCESS} | grep -v grep | wc -l`
+    if [ ${v_check} -eq 0 ]; then
+        v_err=0
+        break
+    fi
+    echo "stop retry ${i}" >> "${v_log}" 2>&1
+done
+if [ ${v_err} -eq 1 ]; then
+    echo "start.sh.test: Error, wallet process stop failed." 2>&1 | tee -a "${v_log}"
+    exit 1
+fi
+
+export LD_LIBRARY_PATH="${TEST_LIB}"
+eval '"${TEST_CMD_DIR}/start.sh" "${TEST_SETTINGS_NOLIB}"' >> "${v_log}" 2>&1
+v_err=$?
+
+if [ ${v_err} -eq 0 ]; then
+    v_err=1
+    for ((i=0; i < ${TEST_START_RETRY_MAX}; i++)); do
+        sleep ${TEST_START_WAIT_SECOND}s
+        eval 'LD_LIBRARY_PATH="${TEST_LIB}" "${TEST_CLIENT}" help' > /dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            v_err=0
+            break
+        fi
+        echo "start retry ${i}" >> "${v_log}" 2>&1
+    done
+    if [ ${v_err} -eq 1 ]; then
+        echo "start.sh.test: Failed 2-1(2) " 2>&1 | tee -a "${v_log}"
+    else
+        echo "start.sh.test: Successful 2-1 " 2>&1 | tee -a "${v_log}"
+    fi
+
+else
+    echo "start.sh.test: Failed 2-1(1) ${v_err}" 2>&1 | tee -a "${v_log}"
+fi
+
+export LD_LIBRARY_PATH=
+
+echo "start.sh.test: ********** END TEST *******************************" 2>&1 | tee -a "${v_log}"
+
+

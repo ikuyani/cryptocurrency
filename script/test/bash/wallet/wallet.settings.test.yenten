@@ -9,24 +9,24 @@
 ######################################################################
 
 # wallet application home
-ENV_WALLETAPP_HOME=/wallet/xxcoin
+ENV_WALLETAPP_HOME=/home/wallet/yenten
 # daemon file
-ENV_DAEMON=${ENV_WALLETAPP_HOME}/bin/xxcoind
+ENV_DAEMON=${ENV_WALLETAPP_HOME}/yentend
 # client file
-ENV_CLIENT=${ENV_WALLETAPP_HOME}/bin/xxcoin-cli
+ENV_CLIENT=${ENV_WALLETAPP_HOME}/yenten-cli
 
 # wallet data home
-ENV_WALLETDATA_HOME=/home/user/.xxcoin
+ENV_WALLETDATA_HOME=/home/wallet/.yenten
 
 # LD_LIBRARY_PATH(BerkeleyDB.4.8, OpenSSL, Boost ...)
-ENV_LIB=
-#ENV_LIB=/wallet/common/lib
+#ENV_LIB=
+ENV_LIB=/home/wallet/common/lib
 #ENV_LIB=/wallet/xxcoin/lib
 
 # command-file's directory
-ENV_CMD_DIR=/wallet/cryptocurrency/script/bash/wallet
+ENV_CMD_DIR=/home/wallet/cryptocurrency/script/bash/wallet
 
 # config-file
-ENV_CONFIG=/wallet/cryptocurrency/script/bash/wallet/wallet.config
+ENV_CONFIG=${ENV_CMD_DIR}/wallet.config
 
 
