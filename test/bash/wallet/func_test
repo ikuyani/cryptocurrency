@@ -1,0 +1,45 @@
+# 関数：ウォレットの開始
+function func_start_wallet () {
+    eval 'LD_LIBRARY_PATH="${TEST_LIB}" "${TEST_CLIENT}" help' > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        eval 'LD_LIBRARY_PATH="${TEST_LIB}" "${TEST_DAEMON}"' >> "${v_log}" 2>&1
+        v_err=1
+        for ((i=0; i < ${TEST_START_RETRY_MAX}; i++)); do
+            sleep ${TEST_START_WAIT_SECOND}s
+            eval 'LD_LIBRARY_PATH="${TEST_LIB}" "${TEST_CLIENT}" help' > /dev/null 2>&1
+            if [ $? -eq 0 ]; then
+                v_err=0
+                break
+            fi
+            echo "start retry ${i}" >> "${v_log}" 2>&1
+        done
+        if [ ${v_err} -eq 1 ]; then
+            echo "${1}: Error, wallet daemon start failed." 2>&1 | tee -a "${v_log}"
+            exit 1
+        fi
+    fi
+}
+
+# 関数：ウォレットの停止
+function func_stop_wallet () {
+    v_check=`ps aux | grep ${TEST_WALLET_PROCESS} | grep -v grep | wc -l`
+    if [ ${v_check} -gt 0 ]; then
+        eval 'LD_LIBRARY_PATH="${TEST_LIB}" "${TEST_CLIENT}" stop' >> "${v_log}" 2>&1
+        v_err=1
+        for ((i=0; i < ${TEST_STOP_RETRY_MAX}; i++)); do
+            sleep ${TEST_STOP_WAIT_SECOND}s
+            v_check=`ps aux | grep ${TEST_WALLET_PROCESS} | grep -v grep | wc -l`
+            if [ ${v_check} -eq 0 ]; then
+                v_err=0
+                break
+            fi
+            echo "stop retry ${i}" >> "${v_log}" 2>&1
+        done
+        if [ ${v_err} -eq 1 ]; then
+            echo "${1}: Error, wallet process stop failed." 2>&1 | tee -a "${v_log}"
+            exit 1
+        fi
+    fi
+}
+
+

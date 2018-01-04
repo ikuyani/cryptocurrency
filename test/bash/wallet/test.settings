@@ -1,8 +1,9 @@
 #!/bin/bash
 
-TEST_CMD_DIR=/home/wallet/cryptocurrency/script/bash/wallet
+TEST_CMD_DIR=/home/wallet/cryptocurrency-script/main/bash/wallet
 
-TEST_DIR=/home/wallet/cryptocurrency/script/test/bash/wallet
+TEST_DIR=/home/wallet/cryptocurrency-script/test/bash/wallet
+TEST_FUNC=${TEST_DIR}/func_test
 
 TEST_SETTINGS=${TEST_DIR}/wallet.settings.test.yenten
 TEST_SETTINGS_NOLIB=${TEST_DIR}/wallet.settings.test.yenten.nolib
@@ -12,6 +13,9 @@ TEST_LIB=/home/wallet/common/lib
 TEST_WALLET_HOME=/home/wallet/yenten
 TEST_DAEMON=${TEST_WALLET_HOME}/yentend
 TEST_CLIENT=${TEST_WALLET_HOME}/yenten-cli
+
+TEST_DATA_HOME=/home/wallet/.yenten
+TEST_WALLET_DAT=${TEST_DATA_HOME}/wallet.dat
 
 TEST_WALLET_PROCESS=${TEST_DAEMON}
 TEST_STOP_RETRY_MAX=10

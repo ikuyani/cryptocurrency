@@ -1,0 +1,159 @@
+#!/bin/bash
+
+# このテストはウォレットのデータを削除するため注意
+
+v_log="${1}"
+if [ -z "${v_log}" -o ! -f "${v_log}" ]; then
+    v_log="./encryptwallet.sh.test.log"
+    echo > "${v_log}"
+fi
+
+echo "encryptwallet.sh.test: ********** START TEST *******************************" 2>&1 | tee -a "${v_log}"
+source ./test.settings
+source "${TEST_SETTINGS}"
+source "${ENV_CONFIG}"
+source "${TEST_FUNC}"
+
+# 停止
+func_stop_wallet "encryptwallet.sh.test"
+
+# 既存wallet.datのリネーム
+v_rename=${TEST_WALLET_DAT}.rename.`date "+%Y%m%d%H%M%S"`
+mv ${TEST_WALLET_DAT} ${v_rename}
+
+# 1-1 引数チェック 
+echo "encryptwallet.sh.test: start 1-1" >> "${v_log}" 2>&1
+eval "${TEST_CMD_DIR}/encryptwallet.sh" >> "${v_log}" 2>&1
+v_err=$?
+if [ ${v_err} -eq ${CF_ERR_SETTINGS} ]; then
+    echo "encryptwallet.sh.test: Successful 1-1 " 2>&1 | tee -a "${v_log}"
+else
+    echo "encryptwallet.sh.test: Failed 1-1 ${v_err}" 2>&1 | tee -a "${v_log}"
+fi
+
+# 1-2 引数チェック
+echo "encryptwallet.sh.test: start 1-2" >> "${v_log}" 2>&1
+eval '"${TEST_CMD_DIR}/encryptwallet.sh" /home' >> "${v_log}" 2>&1
+v_err=$?
+if [ ${v_err} -eq 100 ]; then
+    echo "encryptwallet.sh.test: Successful 1-2 " 2>&1 | tee -a "${v_log}"
+else
+    echo "encryptwallet.sh.test: Failed 1-2 ${v_err}" 2>&1 | tee -a "${v_log}"
+fi
+
+
+# 2-1 正常 LIB指定あり
+echo "encryptwallet.sh.test: start 2-1" >> "${v_log}" 2>&1
+
+# 停止
+func_stop_wallet "encryptwallet.sh.test"
+
+# ウォレットの削除
+rm -f ${TEST_WALLET_DAT}
+
+# 開始
+func_start_wallet "encryptwallet.sh.test"
+
+# 処理の実行
+eval '"${TEST_CMD_DIR}/encryptwallet.sh" "${TEST_SETTINGS}"' # 対話型なのでログ出力しない
+v_err=$?
+if [ ${v_err} -eq 0 ]; then
+    # 停止
+    func_stop_wallet "encryptwallet.sh.test"
+    # 開始
+    func_start_wallet "encryptwallet.sh.test"
+    # パスフレーズ確認
+    echo "設定したパスワードを入力"
+    read v_passphrase
+    eval 'LD_LIBRARY_PATH="${TEST_LIB}" "${TEST_CLIENT}" walletpassphrase "${v_passphrase}" 100'
+    v_err=$?
+    if [ ${v_err} -eq 0 ]; then
+        echo "encryptwallet.sh.test: Successful 2-1 " 2>&1 | tee -a "${v_log}"
+    else       
+        echo "encryptwallet.sh.test: Failed 2-1(2) " 2>&1 | tee -a "${v_log}"
+    fi
+else
+    echo "encryptwallet.sh.test: Failed 2-1(1) ${v_err}" 2>&1 | tee -a "${v_log}"
+fi
+
+# 停止
+func_stop_wallet "encryptwallet.sh.test"
+
+
+# 2-2 正常 LIB指定なし
+echo "encryptwallet.sh.test: start 2-2" >> "${v_log}" 2>&1
+
+# 停止
+func_stop_wallet "encryptwallet.sh.test"
+
+# ウォレットの削除
+rm -f ${TEST_WALLET_DAT}
+
+# 開始
+func_start_wallet "encryptwallet.sh.test"
+
+# 処理の実行
+export LD_LIBRARY_PATH="${TEST_LIB}"
+eval '"${TEST_CMD_DIR}/encryptwallet.sh" "${TEST_SETTINGS_NOLIB}"' # 対話型なのでログ出力しない
+v_err=$?
+if [ ${v_err} -eq 0 ]; then
+    # 停止
+    func_stop_wallet "encryptwallet.sh.test"
+    # 開始
+    func_start_wallet "encryptwallet.sh.test"
+    # パスフレーズ確認
+    echo "設定したパスワードを入力"
+    read v_passphrase
+    eval '"${TEST_CLIENT}" walletpassphrase ${v_passphrase} 100'
+    v_err=$?
+    if [ ${v_err} -eq 0 ]; then
+        echo "encryptwallet.sh.test: Successful 2-2 " 2>&1 | tee -a "${v_log}"
+    else       
+        echo "encryptwallet.sh.test: Failed 2-2(2) " 2>&1 | tee -a "${v_log}"
+    fi
+else
+    echo "encryptwallet.sh.test: Failed 2-2(1) ${v_err}" 2>&1 | tee -a "${v_log}"
+fi
+
+# 停止
+func_stop_wallet "encryptwallet.sh.test"
+
+export LD_LIBRARY_PATH=
+
+
+# 3-1 キャンセル
+echo "encryptwallet.sh.test: start 3-1" >> "${v_log}" 2>&1
+
+# 処理の実行
+echo "処理をキャンセルしてください。"
+eval '"${TEST_CMD_DIR}/encryptwallet.sh" "${TEST_SETTINGS}"' # 対話型なのでログ出力しない
+v_err=$?
+if [ ${v_err} -eq ${CF_ERR_ENCRYPTWALLET_CANCEL} ]; then
+    echo "encryptwallet.sh.test: Successful 3-1" 2>&1 | tee -a "${v_log}"
+else
+    echo "encryptwallet.sh.test: Failed 3-1 ${v_err}" 2>&1 | tee -a "${v_log}"
+fi
+
+
+# 3-2 パスフレーズが1度目と2度目で異なる
+echo "encryptwallet.sh.test: start 3-2" >> "${v_log}" 2>&1
+
+# 処理の実行
+echo "1度目と2度目で違うパスワードを入力してください。"
+eval '"${TEST_CMD_DIR}/encryptwallet.sh" "${TEST_SETTINGS}"' # 対話型なのでログ出力しない
+v_err=$?
+if [ ${v_err} -eq ${CF_ERR_ENCRYPTWALLET_PASSPHRASE} ]; then
+    echo "encryptwallet.sh.test: Successful 3-2" 2>&1 | tee -a "${v_log}"
+else
+    echo "encryptwallet.sh.test: Failed 3-2 ${v_err}" 2>&1 | tee -a "${v_log}"
+fi
+
+
+
+# wallet.datを戻す
+rm -f ${TEST_WALLET_DAT}
+mv ${v_rename} ${TEST_WALLET_DAT}
+
+echo "encryptwallet.sh.test: ********** END TEST *******************************" 2>&1 | tee -a "${v_log}"
+
+
